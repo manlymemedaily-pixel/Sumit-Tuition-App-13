@@ -81,6 +81,108 @@ interface SubjectCardPalette {
   shadow: string;
 }
 
+interface SubjectVisualStyle {
+  topBar: string;
+  iconBg: string;
+  iconAccent: string;
+  ring: string;
+  badge: string;
+  border: string;
+  shadow: string;
+}
+
+function getSubjectVisualStyle(subjectName: string): SubjectVisualStyle {
+  const normalized = subjectName.trim().toLowerCase();
+  const styles: Record<string, SubjectVisualStyle> = {
+    mathematics: {
+      topBar: "from-sky-500 via-blue-500 to-indigo-600",
+      iconBg: "bg-sky-50",
+      iconAccent: "text-sky-600",
+      ring: "text-sky-600",
+      badge: "bg-sky-50 text-sky-700",
+      border: "border-sky-100",
+      shadow: "shadow-[0_16px_40px_rgba(14,116,144,0.10)]"
+    },
+    economics: {
+      topBar: "from-emerald-500 via-teal-500 to-cyan-600",
+      iconBg: "bg-emerald-50",
+      iconAccent: "text-emerald-600",
+      ring: "text-emerald-600",
+      badge: "bg-emerald-50 text-emerald-700",
+      border: "border-emerald-100",
+      shadow: "shadow-[0_16px_40px_rgba(16,185,129,0.10)]"
+    },
+    english: {
+      topBar: "from-violet-500 via-fuchsia-500 to-purple-600",
+      iconBg: "bg-violet-50",
+      iconAccent: "text-violet-600",
+      ring: "text-violet-600",
+      badge: "bg-violet-50 text-violet-700",
+      border: "border-violet-100",
+      shadow: "shadow-[0_16px_40px_rgba(139,92,246,0.10)]"
+    },
+    science: {
+      topBar: "from-cyan-500 via-sky-500 to-blue-600",
+      iconBg: "bg-cyan-50",
+      iconAccent: "text-cyan-600",
+      ring: "text-cyan-600",
+      badge: "bg-cyan-50 text-cyan-700",
+      border: "border-cyan-100",
+      shadow: "shadow-[0_16px_40px_rgba(6,182,212,0.10)]"
+    },
+    "social science": {
+      topBar: "from-rose-500 via-orange-500 to-amber-500",
+      iconBg: "bg-rose-50",
+      iconAccent: "text-rose-600",
+      ring: "text-rose-600",
+      badge: "bg-rose-50 text-rose-700",
+      border: "border-rose-100",
+      shadow: "shadow-[0_16px_40px_rgba(244,63,94,0.10)]"
+    },
+    hindi: {
+      topBar: "from-pink-500 via-rose-500 to-fuchsia-500",
+      iconBg: "bg-pink-50",
+      iconAccent: "text-pink-600",
+      ring: "text-pink-600",
+      badge: "bg-pink-50 text-pink-700",
+      border: "border-pink-100",
+      shadow: "shadow-[0_16px_40px_rgba(236,72,153,0.10)]"
+    },
+    nepali: {
+      topBar: "from-indigo-500 via-blue-500 to-violet-600",
+      iconBg: "bg-indigo-50",
+      iconAccent: "text-indigo-600",
+      ring: "text-indigo-600",
+      badge: "bg-indigo-50 text-indigo-700",
+      border: "border-indigo-100",
+      shadow: "shadow-[0_16px_40px_rgba(79,70,229,0.10)]"
+    },
+    "computer science": {
+      topBar: "from-amber-500 via-orange-500 to-red-500",
+      iconBg: "bg-amber-50",
+      iconAccent: "text-amber-600",
+      ring: "text-amber-600",
+      badge: "bg-amber-50 text-amber-700",
+      border: "border-amber-100",
+      shadow: "shadow-[0_16px_40px_rgba(245,158,11,0.10)]"
+    }
+  };
+
+  if (styles[normalized]) return styles[normalized];
+  const found = Object.keys(styles).find((key) => normalized.includes(key));
+  if (found) return styles[found];
+
+  return {
+    topBar: "from-slate-400 via-slate-500 to-slate-600",
+    iconBg: "bg-slate-50",
+    iconAccent: "text-slate-600",
+    ring: "text-slate-600",
+    badge: "bg-slate-100 text-slate-700",
+    border: "border-slate-100",
+    shadow: "shadow-[0_16px_40px_rgba(15,23,42,0.08)]"
+  };
+}
+
 function getSubjectCardPalette(subjectName: string): SubjectCardPalette {
   const paletteSeed = subjectName.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const index = paletteSeed % 7;
@@ -250,7 +352,6 @@ function StudentDetailsModal({ isOpen, onClose, student, formatDate }: StudentDe
       <div className="w-full max-w-lg rounded-[30px] border border-slate-200/70 bg-white p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-start justify-between border-b border-slate-100 pb-3">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Read-only</p>
             <h3 className="text-lg font-black text-slate-900">Student details</h3>
           </div>
           <button onClick={onClose} className="rounded-full bg-slate-100 p-2 text-slate-500">
@@ -281,17 +382,12 @@ function StudentDetailsModal({ isOpen, onClose, student, formatDate }: StudentDe
               <p className="mt-1 text-sm font-semibold text-slate-700">{student.registrationDate ? formatDate(student.registrationDate) : "Not available"}</p>
             </div>
           </div>
-          <div className="rounded-[22px] border border-emerald-100 bg-emerald-50 p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600">Fee overview</p>
-            <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-emerald-700">
-              <span className="rounded-full bg-white/70 px-2.5 py-1">Monthly fee ₹{student.monthlyFee}</span>
-              <span className="rounded-full bg-white/70 px-2.5 py-1">Present {presentCount}</span>
-              <span className="rounded-full bg-white/70 px-2.5 py-1">Absent {absentCount}</span>
-              <span className="rounded-full bg-white/70 px-2.5 py-1">Records {totalRecords}</span>
-            </div>
+          <div className="rounded-[22px] border border-indigo-100 bg-indigo-50 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-indigo-600">Registration password</p>
+            <p className="mt-2 text-sm font-semibold text-slate-700">{student.password || "Not available"}</p>
           </div>
           <div className="rounded-[22px] border border-slate-100 bg-slate-50 p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Subjects</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Enrolled subjects</p>
             <p className="mt-2 text-sm font-semibold text-slate-700">{student.enrolledSubjects?.length ? student.enrolledSubjects.join(", ") : "No subjects added"}</p>
           </div>
         </div>
@@ -329,11 +425,22 @@ interface HeroCardProps {
 
 function HeroCard({ student, onOpenAvatarModal, onOpenStudentDetails, formatDate }: HeroCardProps) {
   return (
-    <div className="relative overflow-hidden rounded-[24px] border border-white/50 bg-gradient-to-br from-violet-700 via-fuchsia-700 to-amber-600 p-3 text-white shadow-[0_24px_70px_rgba(109,40,217,0.22)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.22),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.12),_transparent_30%)]" />
-      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex flex-1 items-center gap-3">
-          <button onClick={onOpenAvatarModal} className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-white/90 bg-white/15 shadow-lg transition-all hover:scale-105" title="Upload and edit photo">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onOpenStudentDetails}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onOpenStudentDetails();
+        }
+      }}
+      className="group relative min-h-[230px] cursor-pointer overflow-hidden rounded-[32px] border border-white/45 bg-gradient-to-br from-[#1E3A8A] via-[#4F46E5] to-[#7C3AED] p-5 text-white shadow-none"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.24),_transparent_46%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_32%)]" />
+      <div className="relative flex items-center justify-between gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <button onClick={(event) => { event.stopPropagation(); onOpenAvatarModal(); }} className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[22px] border-[3px] border-white/90 bg-white/15 shadow-lg transition-all hover:scale-105" title="Upload and edit photo">
             {student.avatarUrl ? (
               <img src={student.avatarUrl} alt={student.name} className="h-full w-full object-cover" />
             ) : (
@@ -344,13 +451,14 @@ function HeroCard({ student, onOpenAvatarModal, onOpenStudentDetails, formatDate
             </div>
           </button>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/75">Student Portal</p>
-            <button type="button" onClick={onOpenStudentDetails} className="mt-1 text-left text-base font-black text-white transition-opacity hover:opacity-90">
-              View profile
-            </button>
+            <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/75">PERSONAL STUDENT SPACE</p>
+            <p className="mt-1 text-base font-black text-white">{student.name}</p>
             <p className="mt-1 text-[11px] text-white/85">Keep track of notes, progress, attendance and many more.</p>
             {student.registrationDate && (
-              <p className="mt-1 text-[10px] text-white/75">Joined {formatDate(student.registrationDate)}</p>
+              <div className="mt-2 flex items-center gap-2 text-[10px] font-semibold text-white/80">
+                <CalendarDays className="h-3.5 w-3.5" />
+                <span>Joined {formatDate(student.registrationDate)}</span>
+              </div>
             )}
           </div>
         </div>
@@ -365,7 +473,7 @@ interface WeeklyAttendanceChecklistProps {
 
 function WeeklyAttendanceChecklist({ entries }: WeeklyAttendanceChecklistProps) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-2 sm:gap-3">
+    <div className="flex items-start justify-between gap-1.5">
       {entries.map((entry) => {
         const isPresent = entry.status === "present";
         const isAbsent = entry.status === "absent";
@@ -378,21 +486,21 @@ function WeeklyAttendanceChecklist({ entries }: WeeklyAttendanceChecklistProps) 
         const weekdayLabel = entryDate.toLocaleDateString("en-IN", { weekday: "short" }).toUpperCase();
 
         return (
-          <div key={entry.key} className="flex min-w-[42px] flex-1 flex-col items-center gap-1.5">
-            <div className={`flex h-8 w-8 items-center justify-center rounded-full border text-[11px] font-black shadow-sm ${isPresent ? "border-emerald-300 bg-emerald-500 text-white" : isAbsent ? "border-rose-300 bg-rose-500 text-white" : isHoliday ? "border-white/20 bg-white/15 text-white" : "border-slate-300 bg-white text-slate-700"}`}>
+          <div key={entry.key} className="flex min-w-[30px] flex-1 flex-col items-center gap-1">
+            <div className={`flex h-7 w-7 items-center justify-center rounded-full border text-[10px] font-black ${isPresent ? "border-white/30 bg-white/90 text-emerald-700" : isAbsent ? "border-white/30 bg-white/95 text-rose-600" : isHoliday ? "border-white/20 bg-white/15 text-white" : "border-white/20 bg-white/15 text-white/80"}`}>
               {isPresent ? (
                 <span className="leading-none">✓</span>
               ) : isAbsent ? (
-                <span className="leading-none">✕</span>
+                <span className="text-[11px] leading-none font-black">✕</span>
               ) : isHoliday ? (
-                <span className="text-[9px] leading-none">H</span>
+                <span className="text-[8px] leading-none">H</span>
               ) : (
-                <span className="text-[9px] leading-none">NA</span>
+                <span className="text-[7px] leading-none">NA</span>
               )}
             </div>
             <div className="text-center">
-              <div className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-50/80">{dateLabel}</div>
-              <div className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-50/90">{weekdayLabel}</div>
+              <div className="text-[8px] font-black uppercase tracking-[0.16em] text-white/80">{dateLabel}</div>
+              <div className="text-[7px] font-black uppercase tracking-[0.14em] text-white/70">{weekdayLabel}</div>
             </div>
           </div>
         );
@@ -406,17 +514,18 @@ interface ProgressRingProps {
   size?: number;
   strokeWidth?: number;
   labelClassName?: string;
+  colorClassName?: string;
 }
 
-function ProgressRing({ percent, size = 70, strokeWidth = 8, labelClassName = "text-slate-800" }: ProgressRingProps) {
+function ProgressRing({ percent, size = 70, strokeWidth = 8, labelClassName = "text-slate-800", colorClassName = "text-slate-700" }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference - (circumference * percent) / 100;
   return (
     <div className="relative flex items-center justify-center">
       <svg width={size} height={size} className="-rotate-90" viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size / 2} cy={size / 2} r={radius} stroke="rgba(255,255,255,0.55)" strokeWidth={strokeWidth} fill="none" />
-        <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" fill="none" strokeDasharray={circumference} strokeDashoffset={dashOffset} className="text-slate-700 transition-all duration-500" />
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="rgba(148,163,184,0.25)" strokeWidth={strokeWidth} fill="none" />
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" fill="none" strokeDasharray={circumference} strokeDashoffset={dashOffset} className={`transition-all duration-500 ${colorClassName}`} />
       </svg>
       <div className={`absolute text-sm font-black ${labelClassName}`}>{percent}%</div>
     </div>
@@ -436,28 +545,34 @@ interface AttendanceCardProps {
 }
 
 function AttendanceCard({ attendanceStats, weeklyAttendance, onOpenSheet }: AttendanceCardProps) {
+  const absentCount = Math.max(attendanceStats.total - attendanceStats.presents, 0);
   return (
-    <div className="relative flex h-full min-h-[172px] sm:min-h-[200px] flex-col overflow-hidden rounded-[24px] border border-emerald-400/20 bg-gradient-to-br from-emerald-600 via-green-500 to-lime-500 p-3 text-white shadow-[0_20px_55px_rgba(5,150,105,0.24)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_44%)]" />
-      <div className="relative flex flex-1 flex-col gap-2">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-50/85">Attendance</p>
-            <h3 className="mt-1 text-sm font-black">Weekly overview</h3>
-          </div>
-          <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/25 bg-white/10 p-1.5 shadow-sm backdrop-blur" aria-label="Open attendance history">
-            <Info className="h-3.5 w-3.5" />
-          </button>
+    <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-emerald-700 via-teal-700 to-cyan-700 p-4 text-white shadow-none">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_35%)]" />
+      <div className="relative flex items-start justify-between gap-2">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/75">Attendance</p>
+          <h3 className="mt-1 text-base font-black">Weekly snapshot</h3>
         </div>
-        <div className="flex items-end justify-between gap-2">
-          <div>
-            <p className="text-2xl font-black leading-none">{attendanceStats.rate}%</p>
-            <p className="mt-1 text-[10px] text-emerald-50/85">{attendanceStats.presents}/{attendanceStats.total} classes</p>
-          </div>
+        <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/20 bg-white/10 p-1.5 text-white/90" aria-label="Open attendance history">
+          <Info className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      <div className="relative mt-2 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-3xl font-black leading-none">{attendanceStats.presents}/{attendanceStats.total}</p>
+          <p className="mt-2 text-[11px] font-semibold text-white/80">classes attended</p>
         </div>
-        <div className="rounded-[18px] border border-white/20 bg-white/12 p-2 shadow-inner backdrop-blur-lg">
-          <WeeklyAttendanceChecklist entries={weeklyAttendance} />
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/15 text-xl font-black">
+          ✕
         </div>
+      </div>
+      <div className="relative mt-3 rounded-[20px] border border-white/15 bg-white/12 p-2.5 backdrop-blur-sm">
+        <div className="mb-1 flex items-center justify-between text-[9px] font-black uppercase tracking-[0.18em] text-white/70">
+          <span>Week</span>
+          <span>{absentCount} absent</span>
+        </div>
+        <WeeklyAttendanceChecklist entries={weeklyAttendance} />
       </div>
     </div>
   );
@@ -477,46 +592,41 @@ interface FeeCardProps {
 function FeeCard({ student, currentMonthName, currentMonthStatus, pendingMonths, totalPendingAmount, onOpenSheet }: FeeCardProps) {
   const isPaid = currentMonthStatus === "paid";
   const isNa = currentMonthStatus === "na";
-  const gradient = isPaid ? "from-cyan-600 via-sky-600 to-blue-700" : isNa ? "from-slate-700 via-slate-600 to-slate-500" : "from-amber-600 via-orange-500 to-rose-500";
-  const accent = isPaid || isNa ? "bg-emerald-500/15 text-emerald-50 border-emerald-400/30" : "bg-amber-500/15 text-amber-50 border-amber-400/30";
+  const accent = isPaid || isNa ? "bg-white/20 text-white border-white/20" : "bg-white/15 text-white border-white/20";
   return (
-    <div className={`relative flex h-full min-h-[172px] sm:min-h-[200px] flex-col overflow-hidden rounded-[24px] border border-white/20 bg-gradient-to-br ${gradient} p-3 text-white shadow-[0_20px_55px_rgba(15,23,42,0.2)]`}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.15),_transparent_44%)]" />
-      <div className="relative flex flex-1 flex-col gap-2">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/80">Fees</p>
-            <h3 className="mt-1 text-sm font-black">{currentMonthName}</h3>
-          </div>
-          <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/25 bg-white/10 p-1.5 shadow-sm backdrop-blur" aria-label="Open fee history">
-            <Info className="h-3.5 w-3.5" />
-          </button>
+    <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-amber-700 via-orange-600 to-rose-700 p-4 text-white shadow-none">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_35%)]" />
+      <div className="relative flex items-start justify-between gap-2">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/75">Fee status</p>
+          <h3 className="mt-1 text-base font-black">{currentMonthName}</h3>
         </div>
-        <div className="flex items-end justify-between gap-2">
-          <div>
-            <p className="text-2xl font-black leading-none">₹{student.monthlyFee}/mo</p>
-            <p className="mt-1 text-[10px] text-white/85">{currentMonthName}</p>
-          </div>
-          <span className={`rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.22em] ${accent}`}>
-            {currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : "Pending"}
+        <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/20 bg-white/10 p-1.5 text-white/90" aria-label="Open fee history">
+          <Info className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      <div className="relative mt-2">
+        <p className="text-3xl font-black leading-none">₹{student.monthlyFee}</p>
+        <p className="mt-2 text-[11px] font-semibold text-white/80">Monthly fee</p>
+      </div>
+      <div className="relative rounded-[20px] border border-white/15 bg-white/12 p-3 backdrop-blur-sm">
+        <div className="flex items-center justify-between text-[10px] font-semibold text-white/85">
+          <span className="flex items-center gap-1">
+            <ReceiptText className="h-3 w-3" />
+            Pending months
           </span>
+          <span className="text-sm font-black text-white">{pendingMonths.length}</span>
         </div>
-        <div className="rounded-[18px] border border-white/20 bg-white/12 p-2 shadow-inner backdrop-blur-lg">
-          <div className="flex items-center justify-between text-[10px] font-semibold text-white/85">
-            <span className="flex items-center gap-1">
-              <ReceiptText className="h-3 w-3" />
-              Pending Months
-            </span>
-            <span className="text-sm font-black">{pendingMonths.length}</span>
-          </div>
-          <div className="mt-1 flex items-center justify-between text-[10px] font-semibold text-white/85">
-            <span className="flex items-center gap-1">
-              <CircleDollarSign className="h-3 w-3" />
-              Pending Amount
-            </span>
-            <span className="text-sm font-black">₹{totalPendingAmount}</span>
-          </div>
+        <div className="mt-2 flex items-center justify-between text-[10px] font-semibold text-white/85">
+          <span className="flex items-center gap-1">
+            <CircleDollarSign className="h-3 w-3" />
+            Balance
+          </span>
+          <span className="text-sm font-black text-white">₹{totalPendingAmount}</span>
         </div>
+        <span className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${accent}`}>
+          {currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : "Pending"}
+        </span>
       </div>
     </div>
   );
@@ -547,6 +657,9 @@ function AttendanceBottomSheet({
   canGoPrevious,
   canGoNext
 }: AttendanceBottomSheetProps) {
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+
   const targetDate = React.useMemo(() => {
     const [monthName, yearStr] = (selectedMonthLabel || "").split(" ");
     const monthIndex = MONTH_NAMES.indexOf(monthName);
@@ -557,68 +670,85 @@ function AttendanceBottomSheet({
   const calendarDays = React.useMemo(() => getCalendarDaysForCurrentMonth(student, targetDate), [student, targetDate]);
   const selectedMonthSummary = attendanceHistoryByMonth.find((item) => item.month === selectedMonthLabel);
 
+  const handleSheetTouchStart = (event: React.TouchEvent) => {
+    setTouchEndX(null);
+    setTouchStartX(event.touches[0].clientX);
+  };
+
+  const handleSheetTouchMove = (event: React.TouchEvent) => {
+    setTouchEndX(event.touches[0].clientX);
+  };
+
+  const handleSheetTouchEnd = () => {
+    if (touchStartX === null || touchEndX === null) return;
+    const distance = touchStartX - touchEndX;
+    if (distance > 50 && canGoNext) {
+      onNextMonth();
+    } else if (distance < -50 && canGoPrevious) {
+      onPreviousMonth();
+    }
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
+
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-950/60 p-2 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-lg rounded-[30px] border border-slate-200/70 bg-white p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
-        <div className="flex items-start justify-between border-b border-slate-100 pb-3">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-lg overflow-hidden rounded-[30px] border border-slate-200/70 bg-white shadow-2xl" onClick={(event) => event.stopPropagation()} onTouchStart={handleSheetTouchStart} onTouchMove={handleSheetTouchMove} onTouchEnd={handleSheetTouchEnd}>
+        <div className="flex items-start justify-between border-b border-slate-100 p-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Attendance sheets</p>
-            <h3 className="text-lg font-black text-slate-900">Monthly attendance calendar</h3>
+            <h3 className="text-lg font-black text-slate-900">Attendance history</h3>
           </div>
           <button onClick={onClose} className="rounded-full bg-slate-100 p-2 text-slate-500">
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="mt-3 flex items-center justify-between rounded-[22px] border border-slate-100 bg-slate-50 px-3 py-2">
-          <button onClick={onPreviousMonth} disabled={!canGoPrevious} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <span className="text-sm font-black text-slate-700">{selectedMonthLabel || "Current month"}</span>
-          <button onClick={onNextMonth} disabled={!canGoNext} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          <div className="rounded-[22px] border border-emerald-100 bg-emerald-50 p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600">Attendance %</p>
-            <p className="mt-1 text-xl font-black text-emerald-700">{selectedMonthSummary?.pct ?? attendanceStats.rate}%</p>
+        <div className="max-h-[78vh] overflow-y-auto p-4">
+          <div className="mt-1 flex items-center justify-between rounded-[22px] border border-slate-100 bg-slate-50 px-3 py-2">
+            <button onClick={onPreviousMonth} disabled={!canGoPrevious} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <span className="text-sm font-black text-slate-700">{selectedMonthLabel || "Current month"}</span>
+            <button onClick={onNextMonth} disabled={!canGoNext} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
-          <div className="rounded-[22px] border border-rose-100 bg-rose-50 p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-rose-600">Present / Absent</p>
-            <p className="mt-1 text-xl font-black text-rose-700">{selectedMonthSummary?.present ?? attendanceStats.presents}/{selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</p>
-          </div>
-          <div className="rounded-[22px] border border-slate-100 bg-slate-50 p-3 sm:col-span-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Monthly summary</p>
-            <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-600">
-              <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-emerald-700">Present {selectedMonthSummary?.present ?? attendanceStats.presents}</span>
-              <span className="rounded-full bg-rose-100 px-2.5 py-1 text-rose-700">Absent {selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</span>
-              <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">Leaves 0</span>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <div className="rounded-[22px] border border-emerald-100 bg-emerald-50 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600">Attendance %</p>
+              <p className="mt-1 text-xl font-black text-emerald-700">{selectedMonthSummary?.pct ?? attendanceStats.rate}%</p>
+            </div>
+            <div className="rounded-[22px] border border-rose-100 bg-rose-50 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-rose-600">Present / Absent</p>
+              <p className="mt-1 text-xl font-black text-rose-700">{selectedMonthSummary?.present ?? attendanceStats.presents}/{selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</p>
+            </div>
+            <div className="rounded-[22px] border border-slate-100 bg-slate-50 p-3 sm:col-span-2">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Monthly summary</p>
+              <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-600">
+                <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-emerald-700">Present {selectedMonthSummary?.present ?? attendanceStats.presents}</span>
+                <span className="rounded-full bg-rose-100 px-2.5 py-1 text-rose-700">Absent {selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</span>
+                <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">No class 0</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mt-4 grid grid-cols-7 gap-2">
-          {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day) => (
-            <div key={day} className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{day}</div>
-          ))}
-          {calendarDays.map((item) => {
-            const isPresent = item.status === "present";
-            const isAbsent = item.status === "absent";
-            const isHoliday = item.status === "holiday";
-            const isNone = item.status === "none";
-            const isNa = item.status === "na";
-            return (
-              <div key={item.key} className={`rounded-2xl border p-2 text-center text-[11px] font-black ${isPresent ? "border-emerald-200 bg-emerald-100 text-emerald-700" : isAbsent ? "border-rose-200 bg-rose-100 text-rose-700" : isHoliday ? "border-slate-200 bg-slate-100 text-slate-600" : isNa ? "border-slate-200 bg-white text-slate-600" : isNone ? "border-transparent bg-transparent text-transparent" : "border-slate-200 bg-white text-slate-500"}`}>
-                {item.value || ""}
-              </div>
-            );
-          })}
-        </div>
-        <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-3 text-[10px] font-black uppercase tracking-[0.23em] text-slate-500">
-          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-emerald-700">Green Present</span>
-          <span className="rounded-full bg-rose-100 px-2.5 py-1 text-rose-700">Red Absent</span>
-          <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">Grey Holiday</span>
-          <span className="rounded-full bg-white px-2.5 py-1 text-slate-600">White No class</span>
+          <div className="mt-4 grid grid-cols-7 gap-2">
+            {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day) => (
+              <div key={day} className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{day}</div>
+            ))}
+            {calendarDays.map((item) => {
+              const isPresent = item.status === "present";
+              const isAbsent = item.status === "absent";
+              const isHoliday = item.status === "holiday";
+              const isNone = item.status === "none";
+              const isNa = item.status === "na";
+              return (
+                <div key={item.key} className={`rounded-2xl border p-2 text-center text-[11px] font-black ${isPresent ? "border-emerald-200 bg-emerald-100 text-emerald-700" : isAbsent ? "border-rose-200 bg-rose-100 text-rose-700" : isHoliday ? "border-slate-200 bg-slate-100 text-slate-600" : isNa ? "border-slate-200 bg-white text-slate-600" : isNone ? "border-transparent bg-transparent text-transparent" : "border-slate-200 bg-white text-slate-500"}`}>
+                  {item.value || ""}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
@@ -684,7 +814,7 @@ interface SubjectProgressCardProps {
 }
 
 function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgressCardProps) {
-  const palette = getSubjectCardPalette(subject.name);
+  const palette = getSubjectVisualStyle(subject.name);
   const IconComponent = getSubjectIcon(subject.name);
   const isEmpty = subject.total === 0 && subject.completed === 0;
   return (
@@ -696,37 +826,37 @@ function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgres
       onClick={() => onSelectSubject(subject.name)}
       className="col-span-1 sm:col-span-2 row-span-1"
     >
-      <div className={`group flex h-full min-h-[168px] flex-col overflow-hidden rounded-[24px] border border-white/50 bg-gradient-to-br ${palette.shell} p-3 text-white shadow-[0_20px_55px_rgba(15,23,42,0.12)] ${palette.shadow}`}>
+      <div className={`group flex h-full min-h-[150px] cursor-pointer flex-col overflow-hidden rounded-[22px] border bg-white p-3.5 text-slate-900 shadow-none transition-all hover:-translate-y-0.5 ${palette.border}`}>
+        <div className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${palette.topBar}`} />
         <div className="flex items-start justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2">
-            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[18px] border border-white/40 bg-white/70 shadow-sm ${palette.chip}`}>
+          <div className="flex min-w-0 items-center gap-2.5">
+            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl ${palette.iconBg} ${palette.iconAccent}`}>
               <IconComponent className="h-4.5 w-4.5" />
             </div>
             <div className="min-w-0">
-              <p className="truncate text-[9px] font-black uppercase tracking-[0.26em] text-white/80">{subject.name}</p>
-              <p className="text-[10px] text-white/80">Progress overview</p>
+              <p className="truncate text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">{subject.name}</p>
+              <p className="text-sm font-black text-slate-900">Progress</p>
             </div>
+          </div>
+          <div className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] ${palette.badge}`}>
+            {subject.rate}%
           </div>
         </div>
         <div className="mt-3 flex items-center gap-3">
-          <ProgressRing percent={isEmpty ? 0 : subject.rate} size={60} strokeWidth={8} labelClassName="text-white text-sm" />
+          <ProgressRing percent={isEmpty ? 0 : subject.rate} size={54} strokeWidth={7} labelClassName="text-slate-800 text-sm" colorClassName={palette.ring} />
           <div className="flex-1">
             {isEmpty ? (
               <>
-                <p className="text-sm font-black text-white">0/0 Chapters</p>
-                <p className="mt-1 text-[10px] text-white/80">No remaining chapters</p>
+                <p className="text-sm font-black text-slate-900">0/0 chapters</p>
+                <p className="mt-1 text-[11px] text-slate-500">No remaining chapters</p>
               </>
             ) : (
               <>
-                <p className="text-sm font-black text-white">{subject.completed}/{subject.total} completed</p>
-                <p className="mt-1 text-[10px] text-white/80">{subject.total - subject.completed} remaining</p>
+                <p className="text-sm font-black text-slate-900">{subject.completed}/{subject.total} done</p>
+                <p className="mt-1 text-[11px] text-slate-500">{subject.total - subject.completed} remaining</p>
               </>
             )}
           </div>
-        </div>
-        <div className="mt-auto flex items-center justify-between pt-2 text-[10px] font-semibold text-white/90">
-          <span>{isEmpty ? "0% complete" : `${subject.rate}% complete`}</span>
-          <ChevronRight className="h-4 w-4" />
         </div>
       </div>
     </motion.div>
@@ -965,7 +1095,7 @@ export function StudentMyTab({
         {/* LEFT PANEL (32% width on sm+ or 4/12 columns) */}
         <div className="col-span-12 min-[520px]:col-span-4 flex flex-col h-full overflow-hidden bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-slate-100 dark:border-slate-800/80 p-4" id="split-left-panel">
           <div className="mb-4 shrink-0" id="study-left-header">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">MY STUDY SPACE</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">ENROLLED SUBJECTS</p>
             <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">ENROLLED SUBJECTS</h2>
           </div>
 
@@ -1345,8 +1475,8 @@ export default function StudentDashboard({
     <div className="flex flex-col gap-4 overflow-x-hidden pb-6 animate-fadeIn" id="student-dashboard-root">
       <HeroCard student={student} onOpenAvatarModal={onOpenAvatarModal} onOpenStudentDetails={() => setShowStudentDetailsModal(true)} formatDate={formatDate} />
 
-      <div className="grid grid-cols-2 gap-3" id="fixed-student-tiles">
-        <div className="min-w-0">
+      <div className="grid gap-4 md:grid-cols-2" id="fixed-student-tiles">
+        <div className="min-w-0 h-full">
           <AttendanceCard
             attendanceStats={attendanceStats}
             attendanceTodayBadge={attendanceTodayBadge}

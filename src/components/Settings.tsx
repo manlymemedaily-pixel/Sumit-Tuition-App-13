@@ -335,14 +335,17 @@ export default function Settings({
       return;
     }
     try {
+      const shareText = "Payment QR code for tuition fee payment";
+      const shareUrl = qrCode;
       if (navigator.share) {
         await navigator.share({
           title: "Payment QR Code",
-          text: "Payment QR code for tuition fee payment",
-          url: qrCode
+          text: shareText,
+          url: shareUrl
         });
       } else {
-        window.open(qrCode, "_blank");
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`;
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
       }
       triggerNotification("Payment QR code share action completed.");
     } catch (err) {
@@ -581,7 +584,7 @@ export default function Settings({
 
               {qrCode ? (
                 <div className="mt-4 flex flex-col items-center gap-4 rounded-2xl border border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-950/40 p-4">
-                  <img src={qrCode} alt="Payment QR" className="h-40 w-40 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white object-contain p-2" />
+                  <img src={qrCode} alt="Payment QR" className="h-40 w-40 rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white object-contain p-2" />
                   <div className="flex w-full flex-col gap-2 sm:flex-row">
                     <button onClick={handleDownloadQr} className="flex-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 text-xs font-black uppercase transition-all cursor-pointer shadow-md shadow-blue-500/10">Download QR</button>
                     <button onClick={handleShareQr} className="flex-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850 px-3 py-2 text-xs font-black uppercase transition-all cursor-pointer">Share QR</button>
@@ -598,7 +601,7 @@ export default function Settings({
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                   <Sun className="w-4 h-4" />
-                  Student Theme
+                  Premium themes
                 </span>
                 <span className="text-xs text-slate-400 dark:text-slate-500">Choose a premium colour gradient that will appear across the student portal instantly.</span>
               </div>
@@ -670,7 +673,7 @@ export default function Settings({
           <div className="flex flex-col border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-1 gap-3">
             <div className="flex flex-col">
               <span className="text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-wider">
-                Premium Colour Gradients
+                Premium themes
               </span>
               <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
                 Change the global branding environment with a premium gradient.

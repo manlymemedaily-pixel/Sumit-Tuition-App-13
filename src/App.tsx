@@ -956,10 +956,13 @@ export default function App() {
       >
         {/* Sleek top banner showing user role and logout */}
         <div className="px-4 py-3 bg-slate-50 dark:bg-[#0d131f] border-b border-slate-150 dark:border-slate-800/80 flex items-center justify-between z-20 shrink-0" id="session-top-header">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-              {auth.role === "admin" ? "Admin Console" : `Student Portal: ${activeStudent?.name || ""}`}
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            </span>
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.32em] text-slate-600 dark:text-slate-300">
+              {auth.role === "admin" ? "Admin Console" : "Student Portal"}
             </span>
             <span className="rounded-full border border-slate-200/70 bg-white/80 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400">
               v{APP_VERSION}

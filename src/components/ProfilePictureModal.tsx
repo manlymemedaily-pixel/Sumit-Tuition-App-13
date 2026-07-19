@@ -238,7 +238,7 @@ export default function ProfilePictureModal({
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
               onWheel={handleWheel}
-              className="relative w-48 h-48 mx-auto rounded-full overflow-hidden border-2 border-blue-500/50 shadow-inner bg-slate-50 dark:bg-slate-950 flex items-center justify-center cursor-move group select-none touch-none"
+              className="relative w-48 h-48 mx-auto rounded-[24px] overflow-hidden border-2 border-blue-500/50 shadow-inner bg-slate-50 dark:bg-slate-950 flex items-center justify-center cursor-move group select-none touch-none"
               title="Drag image to align. Scroll to zoom."
             >
               <div 
@@ -250,12 +250,12 @@ export default function ProfilePictureModal({
                 <img 
                   src={imageSrc} 
                   alt="Preview" 
-                  className="w-full h-full object-cover rounded-full pointer-events-none"
+                  className="w-full h-full object-cover rounded-[24px] pointer-events-none"
                 />
               </div>
               
               {/* Overlay Guidance Indicators */}
-              <div className="absolute inset-0 border-4 border-white/60 dark:border-slate-900/60 rounded-full pointer-events-none" />
+              <div className="absolute inset-0 border-4 border-white/60 dark:border-slate-900/60 rounded-[24px] pointer-events-none" />
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-black/60 text-white text-[9px] font-black rounded-full uppercase flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-all pointer-events-none">
                 <Move className="w-2.5 h-2.5" />
                 <span>Drag to Align</span>
