@@ -606,6 +606,8 @@ export default function Settings({
                 {[
                   { id: "sapphire", name: "Sapphire", color: "from-blue-600 to-indigo-700" },
                   { id: "olive", name: "Olive", color: "from-emerald-600 to-lime-700" },
+                  { id: "turquoise", name: "Turquoise", color: "from-cyan-500 to-teal-600" },
+                  { id: "emerald", name: "Emerald", color: "from-emerald-500 to-green-600" },
                   { id: "ruby", name: "Ruby", color: "from-rose-600 to-red-700" },
                   { id: "gold", name: "Gold", color: "from-amber-500 to-orange-600" }
                 ].map((themeOption) => (
@@ -679,6 +681,8 @@ export default function Settings({
               {[
                 { id: "sapphire", name: "Sapphire Blue", color: "bg-blue-600" },
                 { id: "olive", name: "Olive Green", color: "bg-emerald-700" },
+                { id: "turquoise", name: "Turquoise", color: "bg-cyan-600" },
+                { id: "emerald", name: "Emerald", color: "bg-green-600" },
                 { id: "ruby", name: "Crimson Ruby", color: "bg-rose-600" },
                 { id: "gold", name: "Amber Gold", color: "bg-amber-500" },
                 { id: "white", name: "Platinum White", color: "bg-slate-200 dark:bg-slate-750" }

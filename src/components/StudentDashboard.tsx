@@ -81,7 +81,9 @@ interface SubjectCardPalette {
   shadow: string;
 }
 
-function getSubjectCardPalette(index: number): SubjectCardPalette {
+function getSubjectCardPalette(subjectName: string): SubjectCardPalette {
+  const paletteSeed = subjectName.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const index = paletteSeed % 7;
   const palettes: SubjectCardPalette[] = [
     {
       shell: "from-sky-600/95 via-blue-600/95 to-indigo-700/95",
@@ -140,7 +142,7 @@ function getSubjectCardPalette(index: number): SubjectCardPalette {
       shadow: "shadow-[0_24px_70px_rgba(20,184,166,0.16)]"
     }
   ];
-  return palettes[index % palettes.length];
+  return palettes[index];
 }
 
 function getWeeklyAttendanceDays(student: Student) {
@@ -327,11 +329,11 @@ interface HeroCardProps {
 
 function HeroCard({ student, onOpenAvatarModal, onOpenStudentDetails, formatDate }: HeroCardProps) {
   return (
-    <div className="relative overflow-hidden rounded-[30px] border border-white/50 bg-gradient-to-br from-sky-700 via-indigo-700 to-violet-800 p-4 text-white shadow-[0_30px_90px_rgba(37,99,235,0.25)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.25),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.12),_transparent_30%)]" />
-      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
+    <div className="relative overflow-hidden rounded-[24px] border border-white/50 bg-gradient-to-br from-violet-700 via-fuchsia-700 to-amber-600 p-3 text-white shadow-[0_24px_70px_rgba(109,40,217,0.22)]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.22),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.12),_transparent_30%)]" />
+      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="flex flex-1 items-center gap-3">
-          <button onClick={onOpenAvatarModal} className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-white/90 bg-white/15 shadow-lg transition-all hover:scale-105" title="Upload and edit photo">
+          <button onClick={onOpenAvatarModal} className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-white/90 bg-white/15 shadow-lg transition-all hover:scale-105" title="Upload and edit photo">
             {student.avatarUrl ? (
               <img src={student.avatarUrl} alt={student.name} className="h-full w-full object-cover" />
             ) : (
@@ -342,13 +344,13 @@ function HeroCard({ student, onOpenAvatarModal, onOpenStudentDetails, formatDate
             </div>
           </button>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.34em] text-sky-100">Personal Student Space</p>
-            <button type="button" onClick={onOpenStudentDetails} className="text-left text-lg font-black text-white transition-opacity hover:opacity-90">
-              {student.name}
+            <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/75">Student Portal</p>
+            <button type="button" onClick={onOpenStudentDetails} className="mt-1 text-left text-base font-black text-white transition-opacity hover:opacity-90">
+              View profile
             </button>
-            <p className="mt-1 text-[12px] text-sky-100/90">Keep track of notes, progress, attendance and many more.</p>
+            <p className="mt-1 text-[11px] text-white/85">Keep track of notes, progress, attendance and many more.</p>
             {student.registrationDate && (
-              <p className="mt-1 text-[10px] text-sky-200/90">Joined {formatDate(student.registrationDate)}</p>
+              <p className="mt-1 text-[10px] text-white/75">Joined {formatDate(student.registrationDate)}</p>
             )}
           </div>
         </div>
@@ -435,25 +437,25 @@ interface AttendanceCardProps {
 
 function AttendanceCard({ attendanceStats, weeklyAttendance, onOpenSheet }: AttendanceCardProps) {
   return (
-    <div className="relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-[30px] border border-emerald-400/20 bg-gradient-to-br from-emerald-600 via-green-500 to-lime-500 p-4 text-white shadow-[0_28px_80px_rgba(5,150,105,0.24)]">
+    <div className="relative flex h-full min-h-[172px] sm:min-h-[200px] flex-col overflow-hidden rounded-[24px] border border-emerald-400/20 bg-gradient-to-br from-emerald-600 via-green-500 to-lime-500 p-3 text-white shadow-[0_20px_55px_rgba(5,150,105,0.24)]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_44%)]" />
-      <div className="relative flex flex-1 flex-col gap-3">
-        <div className="flex items-start justify-between gap-3">
+      <div className="relative flex flex-1 flex-col gap-2">
+        <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-50/85">Attendance</p>
-            <h3 className="mt-1 text-lg font-black">Weekly overview</h3>
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-50/85">Attendance</p>
+            <h3 className="mt-1 text-sm font-black">Weekly overview</h3>
           </div>
-          <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/25 bg-white/10 p-2 shadow-sm backdrop-blur" aria-label="Open attendance history">
-            <Info className="h-4 w-4" />
+          <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/25 bg-white/10 p-1.5 shadow-sm backdrop-blur" aria-label="Open attendance history">
+            <Info className="h-3.5 w-3.5" />
           </button>
         </div>
-        <div className="flex items-end justify-between gap-3">
+        <div className="flex items-end justify-between gap-2">
           <div>
-            <p className="text-3xl font-black leading-none">{attendanceStats.rate}%</p>
-            <p className="mt-1 text-[11px] text-emerald-50/85">{attendanceStats.presents}/{attendanceStats.total} classes</p>
+            <p className="text-2xl font-black leading-none">{attendanceStats.rate}%</p>
+            <p className="mt-1 text-[10px] text-emerald-50/85">{attendanceStats.presents}/{attendanceStats.total} classes</p>
           </div>
         </div>
-        <div className="rounded-[24px] border border-white/20 bg-white/12 p-3 shadow-inner backdrop-blur-lg">
+        <div className="rounded-[18px] border border-white/20 bg-white/12 p-2 shadow-inner backdrop-blur-lg">
           <WeeklyAttendanceChecklist entries={weeklyAttendance} />
         </div>
       </div>
@@ -475,41 +477,41 @@ interface FeeCardProps {
 function FeeCard({ student, currentMonthName, currentMonthStatus, pendingMonths, totalPendingAmount, onOpenSheet }: FeeCardProps) {
   const isPaid = currentMonthStatus === "paid";
   const isNa = currentMonthStatus === "na";
-  const gradient = isPaid ? "from-emerald-600 via-teal-500 to-cyan-600" : isNa ? "from-slate-700 via-slate-600 to-slate-500" : "from-rose-600 via-red-500 to-orange-500";
+  const gradient = isPaid ? "from-cyan-600 via-sky-600 to-blue-700" : isNa ? "from-slate-700 via-slate-600 to-slate-500" : "from-amber-600 via-orange-500 to-rose-500";
   const accent = isPaid || isNa ? "bg-emerald-500/15 text-emerald-50 border-emerald-400/30" : "bg-amber-500/15 text-amber-50 border-amber-400/30";
   return (
-    <div className={`relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-[30px] border border-white/20 bg-gradient-to-br ${gradient} p-4 text-white shadow-[0_28px_80px_rgba(15,23,42,0.2)]`}>
+    <div className={`relative flex h-full min-h-[172px] sm:min-h-[200px] flex-col overflow-hidden rounded-[24px] border border-white/20 bg-gradient-to-br ${gradient} p-3 text-white shadow-[0_20px_55px_rgba(15,23,42,0.2)]`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.15),_transparent_44%)]" />
-      <div className="relative flex flex-1 flex-col gap-3">
-        <div className="flex items-start justify-between gap-3">
+      <div className="relative flex flex-1 flex-col gap-2">
+        <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">Fees</p>
-            <h3 className="mt-1 text-lg font-black">{currentMonthName}</h3>
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/80">Fees</p>
+            <h3 className="mt-1 text-sm font-black">{currentMonthName}</h3>
           </div>
-          <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/25 bg-white/10 p-2 shadow-sm backdrop-blur" aria-label="Open fee history">
-            <Info className="h-4 w-4" />
+          <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/25 bg-white/10 p-1.5 shadow-sm backdrop-blur" aria-label="Open fee history">
+            <Info className="h-3.5 w-3.5" />
           </button>
         </div>
-        <div className="flex items-end justify-between gap-3">
+        <div className="flex items-end justify-between gap-2">
           <div>
-            <p className="text-3xl font-black leading-none">₹{student.monthlyFee}/mo</p>
-            <p className="mt-1 text-[11px] text-white/85">{currentMonthName}</p>
+            <p className="text-2xl font-black leading-none">₹{student.monthlyFee}/mo</p>
+            <p className="mt-1 text-[10px] text-white/85">{currentMonthName}</p>
           </div>
-          <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${accent}`}>
+          <span className={`rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.22em] ${accent}`}>
             {currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : "Pending"}
           </span>
         </div>
-        <div className="rounded-[24px] border border-white/20 bg-white/12 p-3 shadow-inner backdrop-blur-lg">
-          <div className="flex items-center justify-between text-[11px] font-semibold text-white/85">
+        <div className="rounded-[18px] border border-white/20 bg-white/12 p-2 shadow-inner backdrop-blur-lg">
+          <div className="flex items-center justify-between text-[10px] font-semibold text-white/85">
             <span className="flex items-center gap-1">
-              <ReceiptText className="h-3.5 w-3.5" />
+              <ReceiptText className="h-3 w-3" />
               Pending Months
             </span>
             <span className="text-sm font-black">{pendingMonths.length}</span>
           </div>
-          <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-white/85">
+          <div className="mt-1 flex items-center justify-between text-[10px] font-semibold text-white/85">
             <span className="flex items-center gap-1">
-              <CircleDollarSign className="h-3.5 w-3.5" />
+              <CircleDollarSign className="h-3 w-3" />
               Pending Amount
             </span>
             <span className="text-sm font-black">₹{totalPendingAmount}</span>
@@ -604,8 +606,9 @@ function AttendanceBottomSheet({
             const isAbsent = item.status === "absent";
             const isHoliday = item.status === "holiday";
             const isNone = item.status === "none";
+            const isNa = item.status === "na";
             return (
-              <div key={item.key} className={`rounded-2xl border p-2 text-center text-[11px] font-black ${isPresent ? "border-emerald-200 bg-emerald-100 text-emerald-700" : isAbsent ? "border-rose-200 bg-rose-100 text-rose-700" : isHoliday ? "border-slate-200 bg-slate-100 text-slate-600" : isNone ? "border-transparent bg-transparent text-transparent" : "border-slate-200 bg-white text-slate-500"}`}>
+              <div key={item.key} className={`rounded-2xl border p-2 text-center text-[11px] font-black ${isPresent ? "border-emerald-200 bg-emerald-100 text-emerald-700" : isAbsent ? "border-rose-200 bg-rose-100 text-rose-700" : isHoliday ? "border-slate-200 bg-slate-100 text-slate-600" : isNa ? "border-slate-200 bg-white text-slate-600" : isNone ? "border-transparent bg-transparent text-transparent" : "border-slate-200 bg-white text-slate-500"}`}>
                 {item.value || ""}
               </div>
             );
@@ -681,7 +684,7 @@ interface SubjectProgressCardProps {
 }
 
 function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgressCardProps) {
-  const palette = getSubjectCardPalette(index);
+  const palette = getSubjectCardPalette(subject.name);
   const IconComponent = getSubjectIcon(subject.name);
   const isEmpty = subject.total === 0 && subject.completed === 0;
   return (
@@ -693,35 +696,35 @@ function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgres
       onClick={() => onSelectSubject(subject.name)}
       className="col-span-1 sm:col-span-2 row-span-1"
     >
-      <div className={`group flex h-full flex-col overflow-hidden rounded-[30px] border border-white/50 bg-gradient-to-br ${palette.shell} p-4 text-white shadow-[0_20px_55px_rgba(15,23,42,0.12)] ${palette.shadow}`}>
+      <div className={`group flex h-full min-h-[168px] flex-col overflow-hidden rounded-[24px] border border-white/50 bg-gradient-to-br ${palette.shell} p-3 text-white shadow-[0_20px_55px_rgba(15,23,42,0.12)] ${palette.shadow}`}>
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
-            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[20px] border border-white/40 bg-white/70 shadow-sm ${palette.chip}`}>
-              <IconComponent className="h-5 w-5" />
+            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[18px] border border-white/40 bg-white/70 shadow-sm ${palette.chip}`}>
+              <IconComponent className="h-4.5 w-4.5" />
             </div>
             <div className="min-w-0">
-              <p className="truncate text-[10px] font-black uppercase tracking-[0.26em] text-white/80">{subject.name}</p>
-              <p className="text-[11px] text-white/80">Progress overview</p>
+              <p className="truncate text-[9px] font-black uppercase tracking-[0.26em] text-white/80">{subject.name}</p>
+              <p className="text-[10px] text-white/80">Progress overview</p>
             </div>
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-3">
-          <ProgressRing percent={isEmpty ? 0 : subject.rate} size={74} strokeWidth={9} labelClassName="text-white text-sm" />
+        <div className="mt-3 flex items-center gap-3">
+          <ProgressRing percent={isEmpty ? 0 : subject.rate} size={60} strokeWidth={8} labelClassName="text-white text-sm" />
           <div className="flex-1">
             {isEmpty ? (
               <>
                 <p className="text-sm font-black text-white">0/0 Chapters</p>
-                <p className="mt-1 text-[11px] text-white/80">No remaining chapters</p>
+                <p className="mt-1 text-[10px] text-white/80">No remaining chapters</p>
               </>
             ) : (
               <>
                 <p className="text-sm font-black text-white">{subject.completed}/{subject.total} completed</p>
-                <p className="mt-1 text-[11px] text-white/80">{subject.total - subject.completed} remaining</p>
+                <p className="mt-1 text-[10px] text-white/80">{subject.total - subject.completed} remaining</p>
               </>
             )}
           </div>
         </div>
-        <div className="mt-auto flex items-center justify-between pt-3 text-[11px] font-semibold text-white/90">
+        <div className="mt-auto flex items-center justify-between pt-2 text-[10px] font-semibold text-white/90">
           <span>{isEmpty ? "0% complete" : `${subject.rate}% complete`}</span>
           <ChevronRight className="h-4 w-4" />
         </div>
@@ -962,8 +965,8 @@ export function StudentMyTab({
         {/* LEFT PANEL (32% width on sm+ or 4/12 columns) */}
         <div className="col-span-12 min-[520px]:col-span-4 flex flex-col h-full overflow-hidden bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-slate-100 dark:border-slate-800/80 p-4" id="split-left-panel">
           <div className="mb-4 shrink-0" id="study-left-header">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">ENROLLED SUBJECTS</p>
-            <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">My Study Space</h2>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">MY STUDY SPACE</p>
+            <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">ENROLLED SUBJECTS</h2>
           </div>
 
           <div className="flex-1 overflow-y-auto flex flex-col gap-2 pr-1 scrollbar-thin" id="study-left-subjects">
@@ -1340,11 +1343,10 @@ export default function StudentDashboard({
 
   return (
     <div className="flex flex-col gap-4 overflow-x-hidden pb-6 animate-fadeIn" id="student-dashboard-root">
-      <StudentHeader student={student} />
       <HeroCard student={student} onOpenAvatarModal={onOpenAvatarModal} onOpenStudentDetails={() => setShowStudentDetailsModal(true)} formatDate={formatDate} />
 
-      <div className="flex flex-wrap gap-3" id="fixed-student-tiles">
-        <div className="flex-1 min-w-[280px]">
+      <div className="grid grid-cols-2 gap-3" id="fixed-student-tiles">
+        <div className="min-w-0">
           <AttendanceCard
             attendanceStats={attendanceStats}
             attendanceTodayBadge={attendanceTodayBadge}
@@ -1357,7 +1359,7 @@ export default function StudentDashboard({
             onOpenSheet={() => setShowAttendanceHistoryModal(true)}
           />
         </div>
-        <div className="flex-1 min-w-[280px]">
+        <div className="min-w-0">
           <FeeCard
             student={student}
             currentMonthName={currentMonthName}
