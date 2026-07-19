@@ -29,7 +29,7 @@ import {
   Smartphone,
   Landmark
 } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { Student, ChapterNote } from "../types";
 import { ALL_ACADEMIC_MONTHS, MONTH_NAMES } from "../utils/monthHelper";
 
@@ -435,7 +435,7 @@ function HeroCard({ student, onOpenAvatarModal, onOpenStudentDetails, formatDate
           onOpenStudentDetails();
         }
       }}
-      className="group relative min-h-[230px] cursor-pointer overflow-hidden rounded-[32px] border border-white/45 bg-gradient-to-br from-[#1E3A8A] via-[#4F46E5] to-[#7C3AED] p-5 text-white shadow-none"
+      className="group relative min-h-[182px] cursor-pointer overflow-hidden rounded-[28px] border border-white/45 bg-gradient-to-br from-[#0F3D8A] via-[#2563EB] to-[#7C3AED] px-4 py-4 text-white shadow-none"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.24),_transparent_46%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_32%)]" />
       <div className="relative flex items-center justify-between gap-3">
@@ -547,30 +547,25 @@ interface AttendanceCardProps {
 function AttendanceCard({ attendanceStats, weeklyAttendance, onOpenSheet }: AttendanceCardProps) {
   const absentCount = Math.max(attendanceStats.total - attendanceStats.presents, 0);
   return (
-    <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-emerald-700 via-teal-700 to-cyan-700 p-4 text-white shadow-none">
+    <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-[#0F3D8A] via-[#2563EB] to-[#7C3AED] p-4 text-white shadow-none">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_35%)]" />
       <div className="relative flex items-start justify-between gap-2">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/75">Attendance</p>
-          <h3 className="mt-1 text-base font-black">Weekly snapshot</h3>
+          <h3 className="mt-1 text-base font-black">Overview</h3>
         </div>
-        <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full border border-white/20 bg-white/10 p-1.5 text-white/90" aria-label="Open attendance history">
-          <Info className="h-3.5 w-3.5" />
+        <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="p-1 text-white/90 transition-colors hover:text-white" aria-label="Open attendance history">
+          <Info className="h-4 w-4" />
         </button>
       </div>
       <div className="relative mt-2 flex items-center justify-between gap-3">
         <div>
           <p className="text-3xl font-black leading-none">{attendanceStats.presents}/{attendanceStats.total}</p>
-          <p className="mt-2 text-[11px] font-semibold text-white/80">classes attended</p>
-        </div>
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/15 text-xl font-black">
-          ✕
         </div>
       </div>
       <div className="relative mt-3 rounded-[20px] border border-white/15 bg-white/12 p-2.5 backdrop-blur-sm">
         <div className="mb-1 flex items-center justify-between text-[9px] font-black uppercase tracking-[0.18em] text-white/70">
           <span>Week</span>
-          <span>{absentCount} absent</span>
         </div>
         <WeeklyAttendanceChecklist entries={weeklyAttendance} />
       </div>
@@ -615,17 +610,17 @@ function FeeCard({ student, currentMonthName, currentMonthStatus, pendingMonths,
             <ReceiptText className="h-3 w-3" />
             Pending months
           </span>
-          <span className="text-sm font-black text-white">{pendingMonths.length}</span>
+          <span className="text-sm font-black text-rose-300">{pendingMonths.length}</span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[10px] font-semibold text-white/85">
           <span className="flex items-center gap-1">
             <CircleDollarSign className="h-3 w-3" />
-            Balance
+            Pending amount
           </span>
           <span className="text-sm font-black text-white">₹{totalPendingAmount}</span>
         </div>
         <span className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${accent}`}>
-          {currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : "Pending"}
+          {currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : currentMonthStatus === "upcoming" ? "Upcoming" : "Pending"}
         </span>
       </div>
     </div>
@@ -691,67 +686,67 @@ function AttendanceBottomSheet({
     setTouchEndX(null);
   };
 
-  if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-lg overflow-hidden rounded-[30px] border border-slate-200/70 bg-white shadow-2xl" onClick={(event) => event.stopPropagation()} onTouchStart={handleSheetTouchStart} onTouchMove={handleSheetTouchMove} onTouchEnd={handleSheetTouchEnd}>
-        <div className="flex items-start justify-between border-b border-slate-100 p-4">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Attendance sheets</p>
-            <h3 className="text-lg font-black text-slate-900">Attendance history</h3>
-          </div>
-          <button onClick={onClose} className="rounded-full bg-slate-100 p-2 text-slate-500">
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="max-h-[78vh] overflow-y-auto p-4">
-          <div className="mt-1 flex items-center justify-between rounded-[22px] border border-slate-100 bg-slate-50 px-3 py-2">
-            <button onClick={onPreviousMonth} disabled={!canGoPrevious} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="text-sm font-black text-slate-700">{selectedMonthLabel || "Current month"}</span>
-            <button onClick={onNextMonth} disabled={!canGoNext} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            <div className="rounded-[22px] border border-emerald-100 bg-emerald-50 p-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600">Attendance %</p>
-              <p className="mt-1 text-xl font-black text-emerald-700">{selectedMonthSummary?.pct ?? attendanceStats.rate}%</p>
-            </div>
-            <div className="rounded-[22px] border border-rose-100 bg-rose-50 p-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-rose-600">Present / Absent</p>
-              <p className="mt-1 text-xl font-black text-rose-700">{selectedMonthSummary?.present ?? attendanceStats.presents}/{selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</p>
-            </div>
-            <div className="rounded-[22px] border border-slate-100 bg-slate-50 p-3 sm:col-span-2">
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Monthly summary</p>
-              <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-600">
-                <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-emerald-700">Present {selectedMonthSummary?.present ?? attendanceStats.presents}</span>
-                <span className="rounded-full bg-rose-100 px-2.5 py-1 text-rose-700">Absent {selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</span>
-                <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">No class 0</span>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+          <motion.div className="w-full max-w-lg overflow-hidden rounded-[30px] border border-slate-200/70 bg-white shadow-2xl" initial={{ y: 24, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 24, opacity: 0 }} transition={{ duration: 0.2, ease: "easeOut" }} onClick={(event) => event.stopPropagation()} onTouchStart={handleSheetTouchStart} onTouchMove={handleSheetTouchMove} onTouchEnd={handleSheetTouchEnd}>
+            <div className="flex items-start justify-between border-b border-slate-100 p-4">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Attendance sheets</p>
+                <h3 className="text-lg font-black text-slate-900">Attendance history</h3>
               </div>
             </div>
-          </div>
-          <div className="mt-4 grid grid-cols-7 gap-2">
-            {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day) => (
-              <div key={day} className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{day}</div>
-            ))}
-            {calendarDays.map((item) => {
-              const isPresent = item.status === "present";
-              const isAbsent = item.status === "absent";
-              const isHoliday = item.status === "holiday";
-              const isNone = item.status === "none";
-              const isNa = item.status === "na";
-              return (
-                <div key={item.key} className={`rounded-2xl border p-2 text-center text-[11px] font-black ${isPresent ? "border-emerald-200 bg-emerald-100 text-emerald-700" : isAbsent ? "border-rose-200 bg-rose-100 text-rose-700" : isHoliday ? "border-slate-200 bg-slate-100 text-slate-600" : isNa ? "border-slate-200 bg-white text-slate-600" : isNone ? "border-transparent bg-transparent text-transparent" : "border-slate-200 bg-white text-slate-500"}`}>
-                  {item.value || ""}
+            <div className="max-h-[78vh] overflow-y-auto p-4">
+              <div className="mt-1 flex items-center justify-between rounded-[22px] border border-slate-100 bg-slate-50 px-3 py-2">
+                <button onClick={onPreviousMonth} disabled={!canGoPrevious} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <span className="text-sm font-black text-slate-700">{selectedMonthLabel || "Current month"}</span>
+                <button onClick={onNextMonth} disabled={!canGoNext} className="rounded-full border border-slate-200 bg-white p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40">
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                <div className="rounded-[22px] border border-emerald-100 bg-emerald-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600">Attendance %</p>
+                  <p className="mt-1 text-xl font-black text-emerald-700">{selectedMonthSummary?.pct ?? attendanceStats.rate}%</p>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
+                <div className="rounded-[22px] border border-rose-100 bg-rose-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-rose-600">Present / Absent</p>
+                  <p className="mt-1 text-xl font-black text-rose-700">{selectedMonthSummary?.present ?? attendanceStats.presents}/{selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</p>
+                </div>
+                <div className="rounded-[22px] border border-slate-100 bg-slate-50 p-3 sm:col-span-2">
+                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Monthly summary</p>
+                  <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-600">
+                    <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-emerald-700">Present {selectedMonthSummary?.present ?? attendanceStats.presents}</span>
+                    <span className="rounded-full bg-rose-100 px-2.5 py-1 text-rose-700">Absent {selectedMonthSummary?.absent ?? (attendanceStats.total - attendanceStats.presents)}</span>
+                    <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">No class 0</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-7 gap-2">
+                {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day) => (
+                  <div key={day} className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{day}</div>
+                ))}
+                {calendarDays.map((item) => {
+                  const isPresent = item.status === "present";
+                  const isAbsent = item.status === "absent";
+                  const isHoliday = item.status === "holiday";
+                  const isNone = item.status === "none";
+                  const isNa = item.status === "na";
+                  return (
+                    <div key={item.key} className={`rounded-2xl border p-2 text-center text-[11px] font-black ${isPresent ? "border-emerald-200 bg-emerald-100 text-emerald-700" : isAbsent ? "border-rose-200 bg-rose-100 text-rose-700" : isHoliday ? "border-slate-200 bg-slate-100 text-slate-600" : isNa ? "border-slate-200 bg-white text-slate-600" : isNone ? "border-transparent bg-transparent text-transparent" : "border-slate-200 bg-white text-slate-500"}`}>
+                      {item.value || ""}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -764,46 +759,46 @@ interface FeeHistoryBottomSheetProps {
 }
 
 function FeeHistoryBottomSheet({ isOpen, onClose, feeHistory, student, formatDate }: FeeHistoryBottomSheetProps) {
-  if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-950/60 p-2 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-lg rounded-[30px] border border-slate-200/70 bg-white p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
-        <div className="flex items-start justify-between border-b border-slate-100 pb-3">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Fee ledger</p>
-            <h3 className="text-lg font-black text-slate-900">Fee history</h3>
-          </div>
-          <button onClick={onClose} className="rounded-full bg-slate-100 p-2 text-slate-500">
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="mt-4 max-h-[70vh] overflow-y-auto pr-1">
-          <div className="flex flex-col gap-2">
-            {feeHistory.map((item) => {
-              const paymentModeMeta = getPaymentModeMeta(item.paymentMode);
-              return (
-                <div key={item.month} className="rounded-[22px] border border-slate-100 bg-slate-50 p-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-black text-slate-800">{item.month}</p>
-                      <p className="mt-1 text-[11px] text-slate-500">Amount: ₹{student.monthlyFee}</p>
-                      <p className="text-[11px] text-slate-500">Paid date: {item.payDate ? formatDate(item.payDate) : "—"}</p>
-                      <div className="mt-1 flex items-center gap-2 rounded-full bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
-                        {paymentModeMeta.icon}
-                        <span>{paymentModeMeta.label}</span>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 p-2 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+          <motion.div className="w-full max-w-lg max-h-[80vh] overflow-hidden rounded-[30px] border border-slate-200/70 bg-white p-4 shadow-2xl" initial={{ y: 24, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 24, opacity: 0 }} transition={{ duration: 0.2, ease: "easeOut" }} onClick={(event) => event.stopPropagation()}>
+            <div className="flex items-start justify-between border-b border-slate-100 pb-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Fee ledger</p>
+                <h3 className="text-lg font-black text-slate-900">Fee history</h3>
+              </div>
+            </div>
+            <div className="mt-4 max-h-[66vh] overflow-y-auto pr-1">
+              <div className="flex flex-col gap-2">
+                {feeHistory.map((item) => {
+                  const paymentModeMeta = getPaymentModeMeta(item.paymentMode);
+                  return (
+                    <div key={item.month} className="rounded-[22px] border border-slate-100 bg-slate-50 p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="text-sm font-black text-slate-800">{item.month}</p>
+                          <p className="mt-1 text-[11px] text-slate-500">Amount: ₹{student.monthlyFee}</p>
+                          <p className="text-[11px] text-slate-500">Paid date: {item.payDate ? formatDate(item.payDate) : "—"}</p>
+                          <div className="mt-1 flex items-center gap-2 rounded-full bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
+                            {paymentModeMeta.icon}
+                            <span>{paymentModeMeta.label}</span>
+                          </div>
+                        </div>
+                        <span className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${item.status === "paid" ? "bg-emerald-100 text-emerald-700" : item.status === "na" ? "bg-slate-200 text-slate-700" : "bg-rose-100 text-rose-700"}`}>
+                          {item.status === "paid" ? "Paid" : item.status === "na" ? "N/A" : "Pending"}
+                        </span>
                       </div>
                     </div>
-                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${item.status === "paid" ? "bg-emerald-100 text-emerald-700" : item.status === "na" ? "bg-slate-200 text-slate-700" : "bg-rose-100 text-rose-700"}`}>
-                      {item.status === "paid" ? "Paid" : item.status === "na" ? "N/A" : "Pending"}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -826,7 +821,7 @@ function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgres
       onClick={() => onSelectSubject(subject.name)}
       className="col-span-1 sm:col-span-2 row-span-1"
     >
-      <div className={`group flex h-full min-h-[150px] cursor-pointer flex-col overflow-hidden rounded-[22px] border bg-white p-3.5 text-slate-900 shadow-none transition-all hover:-translate-y-0.5 ${palette.border}`}>
+      <div className={`group flex h-full min-h-[150px] cursor-pointer flex-col overflow-hidden rounded-[22px] border bg-white p-3 text-slate-900 shadow-none transition-all hover:-translate-y-0.5 ${palette.border}`}>
         <div className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${palette.topBar}`} />
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2.5">
@@ -842,7 +837,7 @@ function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgres
             {subject.rate}%
           </div>
         </div>
-        <div className="mt-3 flex items-center gap-3">
+        <div className="mt-2 flex items-center gap-3">
           <ProgressRing percent={isEmpty ? 0 : subject.rate} size={54} strokeWidth={7} labelClassName="text-slate-800 text-sm" colorClassName={palette.ring} />
           <div className="flex-1">
             {isEmpty ? (
@@ -1071,6 +1066,26 @@ export function StudentMyTab({
     setEditingRemarkId(null);
   };
 
+  const handlePreviewPdf = (note: ChapterNote) => {
+    setActivePreviewPdf({ url: note.pdfUrl, title: `Chapter ${note.chapterNo}: ${note.chapterName}` });
+  };
+
+  const handleDownloadPdf = (note: ChapterNote) => {
+    if (!note.pdfUrl) return;
+    if (note.pdfUrl.startsWith("data:")) {
+      window.open(note.pdfUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = note.pdfUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.download = `${note.chapterName.replace(/\s+/g, "_")}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const getFileSizeStr = (pdfUrl: string, chapterNo: number) => {
     if (pdfUrl.startsWith("data:")) {
       const base64Length = pdfUrl.length - (pdfUrl.indexOf(",") + 1);
@@ -1095,8 +1110,8 @@ export function StudentMyTab({
         {/* LEFT PANEL (32% width on sm+ or 4/12 columns) */}
         <div className="col-span-12 min-[520px]:col-span-4 flex flex-col h-full overflow-hidden bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-slate-100 dark:border-slate-800/80 p-4" id="split-left-panel">
           <div className="mb-4 shrink-0" id="study-left-header">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">ENROLLED SUBJECTS</p>
-            <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">ENROLLED SUBJECTS</h2>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">Subjects</p>
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-1">Open notes by subject</p>
           </div>
 
           <div className="flex-1 overflow-y-auto flex flex-col gap-2 pr-1 scrollbar-thin" id="study-left-subjects">
@@ -1184,9 +1199,7 @@ export function StudentMyTab({
 
                       <div className="flex flex-wrap items-center gap-1.5 self-end sm:self-center">
                         <button
-                          onClick={() => {
-                            setActivePreviewPdf({ url: note.pdfUrl, title: `Chapter ${note.chapterNo}: ${note.chapterName}` });
-                          }}
+                          onClick={() => handlePreviewPdf(note)}
                           className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer"
                           title="View PDF"
                         >
@@ -1194,15 +1207,15 @@ export function StudentMyTab({
                           <span>View</span>
                         </button>
 
-                        <a
-                          href={note.pdfUrl}
-                          download={`${note.chapterName.replace(/\s+/g, "_")}.pdf`}
-                          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadPdf(note)}
+                          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all cursor-pointer"
                           title="Download PDF"
                         >
                           <Download className="w-3.5 h-3.5" />
                           <span>Download</span>
-                        </a>
+                        </button>
 
                         <button
                           onClick={() => {
