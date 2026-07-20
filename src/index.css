@@ -123,7 +123,19 @@ body {
   --color-blue-light: #450a0a;
 }
 
-/* Gold (Amber/Yellow Accent) */
+/* Amber (Warm Accent) */
+.theme-amber {
+  --color-blue-primary: #d97706;
+  --color-blue-hover: #b45309;
+  --color-blue-light: #fffbeb;
+}
+.dark.theme-amber, .dark .theme-amber {
+  --color-blue-primary: #fbbf24;
+  --color-blue-hover: #f59e0b;
+  --color-blue-light: #451a03;
+}
+
+/* Legacy alias for older stored values */
 .theme-gold {
   --color-blue-primary: #d97706;
   --color-blue-hover: #b45309;

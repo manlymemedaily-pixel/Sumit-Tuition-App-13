@@ -584,7 +584,9 @@ export default function Settings({
 
               {qrCode ? (
                 <div className="mt-4 flex flex-col items-center gap-4 rounded-2xl border border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-950/40 p-4">
-                  <img src={qrCode} alt="Payment QR" className="h-40 w-40 rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white object-contain p-2" />
+                  <div className="flex h-48 w-48 items-center justify-center overflow-hidden rounded-[24px] border border-slate-200 bg-white p-2 shadow-sm dark:border-slate-800">
+                    <img src={qrCode} alt="Payment QR" className="h-full w-full rounded-[18px] object-contain" />
+                  </div>
                   <div className="flex w-full flex-col gap-2 sm:flex-row">
                     <button onClick={handleDownloadQr} className="flex-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 text-xs font-black uppercase transition-all cursor-pointer shadow-md shadow-blue-500/10">Download QR</button>
                     <button onClick={handleShareQr} className="flex-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850 px-3 py-2 text-xs font-black uppercase transition-all cursor-pointer">Share QR</button>
@@ -609,10 +611,8 @@ export default function Settings({
                 {[
                   { id: "sapphire", name: "Sapphire", color: "from-blue-600 to-indigo-700" },
                   { id: "olive", name: "Olive", color: "from-emerald-600 to-lime-700" },
-                  { id: "turquoise", name: "Turquoise", color: "from-cyan-500 to-teal-600" },
-                  { id: "emerald", name: "Emerald", color: "from-emerald-500 to-green-600" },
                   { id: "ruby", name: "Ruby", color: "from-rose-600 to-red-700" },
-                  { id: "gold", name: "Gold", color: "from-amber-500 to-orange-600" }
+                  { id: "amber", name: "Amber", color: "from-amber-500 to-orange-600" }
                 ].map((themeOption) => (
                   <button
                     key={themeOption.id}
@@ -684,10 +684,8 @@ export default function Settings({
               {[
                 { id: "sapphire", name: "Sapphire Blue", color: "bg-blue-600" },
                 { id: "olive", name: "Olive Green", color: "bg-emerald-700" },
-                { id: "turquoise", name: "Turquoise", color: "bg-cyan-600" },
-                { id: "emerald", name: "Emerald", color: "bg-green-600" },
                 { id: "ruby", name: "Crimson Ruby", color: "bg-rose-600" },
-                { id: "gold", name: "Amber Gold", color: "bg-amber-500" },
+                { id: "amber", name: "Amber", color: "bg-amber-500" },
                 { id: "white", name: "Platinum White", color: "bg-slate-200 dark:bg-slate-750" }
               ].map((t) => (
                 <button
@@ -761,11 +759,13 @@ export default function Settings({
 
               {qrCode ? (
                 <div className="flex flex-col items-center gap-4 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-2xl border border-slate-100 dark:border-slate-900/50">
-                  <img 
-                    src={qrCode} 
-                    alt="Billing QR" 
-                    className="w-40 h-40 object-contain rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-white p-2" 
-                  />
+                  <div className="flex h-48 w-48 items-center justify-center overflow-hidden rounded-[24px] border border-slate-200 bg-white p-2 shadow-sm dark:border-slate-800">
+                    <img 
+                      src={qrCode} 
+                      alt="Billing QR" 
+                      className="h-full w-full rounded-[18px] object-contain" 
+                    />
+                  </div>
                   <div className="flex gap-2.5 w-full">
                     <button
                       onClick={() => fileInputRef.current?.click()}

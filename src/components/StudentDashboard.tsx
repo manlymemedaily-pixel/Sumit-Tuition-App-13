@@ -435,10 +435,10 @@ function HeroCard({ student, onOpenAvatarModal, onOpenStudentDetails, formatDate
           onOpenStudentDetails();
         }
       }}
-      className="group relative min-h-[182px] cursor-pointer overflow-hidden rounded-[28px] border border-white/45 bg-gradient-to-br from-[#0F3D8A] via-[#2563EB] to-[#7C3AED] px-4 py-4 text-white shadow-none"
+      className="group relative min-h-[150px] cursor-pointer overflow-hidden rounded-[28px] border border-white/45 bg-gradient-to-br from-[#0B2F6B] via-[#2563EB] to-[#6D4BFF] px-4 py-3 text-white shadow-none"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.24),_transparent_46%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_32%)]" />
-      <div className="relative flex items-center justify-between gap-3">
+      <div className="relative flex h-full items-center justify-between gap-3">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <button onClick={(event) => { event.stopPropagation(); onOpenAvatarModal(); }} className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[22px] border-[3px] border-white/90 bg-white/15 shadow-lg transition-all hover:scale-105" title="Upload and edit photo">
             {student.avatarUrl ? (
@@ -545,25 +545,24 @@ interface AttendanceCardProps {
 }
 
 function AttendanceCard({ attendanceStats, weeklyAttendance, onOpenSheet }: AttendanceCardProps) {
-  const absentCount = Math.max(attendanceStats.total - attendanceStats.presents, 0);
   return (
-    <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-[#0F3D8A] via-[#2563EB] to-[#7C3AED] p-4 text-white shadow-none">
+    <div className="relative flex aspect-square flex-col justify-between gap-3 overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-[#0B2F6B] via-[#2563EB] to-[#6D4BFF] p-3.5 text-white shadow-none">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_35%)]" />
       <div className="relative flex items-start justify-between gap-2">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/75">Attendance</p>
-          <h3 className="mt-1 text-base font-black">Overview</h3>
+          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/75">Overview</p>
+          <h3 className="mt-1 text-base font-black">Attendance</h3>
         </div>
-        <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="p-1 text-white/90 transition-colors hover:text-white" aria-label="Open attendance history">
+        <button onClick={(e) => { e.stopPropagation(); onOpenSheet(); }} className="rounded-full p-1 text-white/90 transition-colors hover:text-white" aria-label="Open attendance history">
           <Info className="h-4 w-4" />
         </button>
       </div>
-      <div className="relative mt-2 flex items-center justify-between gap-3">
+      <div className="relative flex items-center justify-between gap-3">
         <div>
           <p className="text-3xl font-black leading-none">{attendanceStats.presents}/{attendanceStats.total}</p>
         </div>
       </div>
-      <div className="relative mt-3 rounded-[20px] border border-white/15 bg-white/12 p-2.5 backdrop-blur-sm">
+      <div className="relative rounded-[18px] border border-white/15 bg-white/12 p-2 backdrop-blur-sm">
         <div className="mb-1 flex items-center justify-between text-[9px] font-black uppercase tracking-[0.18em] text-white/70">
           <span>Week</span>
         </div>
@@ -587,9 +586,12 @@ interface FeeCardProps {
 function FeeCard({ student, currentMonthName, currentMonthStatus, pendingMonths, totalPendingAmount, onOpenSheet }: FeeCardProps) {
   const isPaid = currentMonthStatus === "paid";
   const isNa = currentMonthStatus === "na";
-  const accent = isPaid || isNa ? "bg-white/20 text-white border-white/20" : "bg-white/15 text-white border-white/20";
+  const today = new Date();
+  const isAfterMonthEnd = today.getDate() >= 28;
+  const feeStatusLabel = currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : currentMonthStatus === "upcoming" || !isAfterMonthEnd ? "Upcoming" : "Pending";
+  const accent = isPaid || isNa ? "bg-white/20 text-white border-white/20" : feeStatusLabel === "Pending" ? "bg-rose-500/25 text-rose-50 border-rose-200/30" : "bg-white/15 text-white border-white/20";
   return (
-    <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-amber-700 via-orange-600 to-rose-700 p-4 text-white shadow-none">
+    <div className="relative flex aspect-square flex-col justify-between gap-2 overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-[#7C2D12] via-[#EA580C] to-[#DC2626] p-3.5 text-white shadow-none">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.14),_transparent_35%)]" />
       <div className="relative flex items-start justify-between gap-2">
         <div>
@@ -600,17 +602,17 @@ function FeeCard({ student, currentMonthName, currentMonthStatus, pendingMonths,
           <Info className="h-3.5 w-3.5" />
         </button>
       </div>
-      <div className="relative mt-2">
+      <div className="relative">
         <p className="text-3xl font-black leading-none">₹{student.monthlyFee}</p>
-        <p className="mt-2 text-[11px] font-semibold text-white/80">Monthly fee</p>
+        <p className="mt-1 text-[11px] font-semibold text-white/80">Monthly fee</p>
       </div>
-      <div className="relative rounded-[20px] border border-white/15 bg-white/12 p-3 backdrop-blur-sm">
+      <div className="relative rounded-[18px] border border-white/15 bg-white/12 p-2.5 backdrop-blur-sm">
         <div className="flex items-center justify-between text-[10px] font-semibold text-white/85">
           <span className="flex items-center gap-1">
             <ReceiptText className="h-3 w-3" />
-            Pending months
+            Pending balance
           </span>
-          <span className="text-sm font-black text-rose-300">{pendingMonths.length}</span>
+          <span className="text-sm font-black text-rose-200">{pendingMonths.length}</span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[10px] font-semibold text-white/85">
           <span className="flex items-center gap-1">
@@ -619,8 +621,8 @@ function FeeCard({ student, currentMonthName, currentMonthStatus, pendingMonths,
           </span>
           <span className="text-sm font-black text-white">₹{totalPendingAmount}</span>
         </div>
-        <span className={`mt-3 inline-flex rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${accent}`}>
-          {currentMonthStatus === "paid" ? "Paid" : currentMonthStatus === "na" ? "N/A" : currentMonthStatus === "upcoming" ? "Upcoming" : "Pending"}
+        <span className={`mt-2 inline-flex rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] ${accent}`}>
+          {feeStatusLabel}
         </span>
       </div>
     </div>
@@ -821,7 +823,7 @@ function SubjectProgressCard({ subject, index, onSelectSubject }: SubjectProgres
       onClick={() => onSelectSubject(subject.name)}
       className="col-span-1 sm:col-span-2 row-span-1"
     >
-      <div className={`group flex h-full min-h-[150px] cursor-pointer flex-col overflow-hidden rounded-[22px] border bg-white p-3 text-slate-900 shadow-none transition-all hover:-translate-y-0.5 ${palette.border}`}>
+      <div className={`group relative flex h-full min-h-[150px] cursor-pointer flex-col overflow-hidden rounded-[22px] border bg-white p-2.5 text-slate-900 shadow-none transition-all hover:-translate-y-0.5 ${palette.border}`}>
         <div className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${palette.topBar}`} />
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2.5">
@@ -1067,23 +1069,28 @@ export function StudentMyTab({
   };
 
   const handlePreviewPdf = (note: ChapterNote) => {
-    setActivePreviewPdf({ url: note.pdfUrl, title: `Chapter ${note.chapterNo}: ${note.chapterName}` });
+    if (!note.pdfUrl) return;
+    if (note.pdfUrl.startsWith("data:") || note.pdfUrl.startsWith("blob:")) {
+      setActivePreviewPdf({ url: note.pdfUrl, title: `Chapter ${note.chapterNo}: ${note.chapterName}` });
+      return;
+    }
+    window.open(note.pdfUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleDownloadPdf = (note: ChapterNote) => {
     if (!note.pdfUrl) return;
     if (note.pdfUrl.startsWith("data:")) {
-      window.open(note.pdfUrl, "_blank", "noopener,noreferrer");
+      const link = document.createElement("a");
+      link.href = note.pdfUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.download = `${note.chapterName.replace(/\s+/g, "_")}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       return;
     }
-    const link = document.createElement("a");
-    link.href = note.pdfUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.download = `${note.chapterName.replace(/\s+/g, "_")}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open(note.pdfUrl, "_blank", "noopener,noreferrer");
   };
 
   const getFileSizeStr = (pdfUrl: string, chapterNo: number) => {
@@ -1232,6 +1239,33 @@ export function StudentMyTab({
                           <MessageSquareText className="h-4.5 w-4.5" />
                         </button>
                       </div>
+                      {editingRemarkId === note.id ? (
+                        <div className="mt-2 flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-900">
+                          <textarea
+                            value={remarkDrafts[note.id] ?? ""}
+                            onChange={(event) => setRemarkDrafts((prev) => ({ ...prev, [note.id]: event.target.value }))}
+                            rows={3}
+                            placeholder="Add a student remark"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-2 text-[11px] text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                          />
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setEditingRemarkId(null)}
+                              className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-[10px] font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleSaveRemark(note)}
+                              className="rounded-lg bg-blue-600 px-2.5 py-1.5 text-[10px] font-bold text-white"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
                     </div>
                   ))
                 )}

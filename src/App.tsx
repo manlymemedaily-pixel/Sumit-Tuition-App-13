@@ -23,7 +23,7 @@ import {
   deleteUserAuthCredentials
 } from "./lib/firestoreService";
 
-const APP_VERSION = "2.5.0";
+const APP_VERSION = "2.6.0";
 
 function normalizeStudent(student: Partial<Student> | null | undefined): Student {
   return {
@@ -310,7 +310,7 @@ export default function App() {
       localStorage.setItem("tuition_app_visual_theme", visualTheme);
     }
     const root = window.document.documentElement;
-    root.classList.remove("theme-sunset", "theme-ocean", "theme-neon", "theme-cosmic", "theme-sapphire", "theme-olive", "theme-ruby", "theme-gold", "theme-white");
+    root.classList.remove("theme-sunset", "theme-ocean", "theme-neon", "theme-cosmic", "theme-sapphire", "theme-olive", "theme-ruby", "theme-amber", "theme-gold", "theme-white");
     root.classList.add(`theme-${visualTheme}`);
   }, [auth.role, visualTheme]);
 

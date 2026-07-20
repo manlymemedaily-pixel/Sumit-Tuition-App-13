@@ -906,9 +906,7 @@ export default function StudentDetails({
                     <div className="p-2 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl">
                       <BookOpen className="w-4 h-4" />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Enrolled Subjects</span>
-                    </div>
+                    <div className="flex flex-col" />
                   </div>
                   {isAdmin && !isEditingSubjects && (
                     <button
