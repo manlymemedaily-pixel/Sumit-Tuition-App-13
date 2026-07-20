@@ -517,8 +517,11 @@ export default function Settings({
       {/* Title */}
       <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100" id="settings-title">
-          Settings
+          {isAdmin ? "Settings" : "Student Settings"}
         </h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          {isAdmin ? "Manage your academy and app preferences." : "Adjust your viewing preferences and access your payment details."}
+        </p>
       </div>
 
       {successMsg && (
@@ -1225,7 +1228,7 @@ export default function Settings({
             Developed and Designed by Sumit
           </span>
           <span className="text-[10px] font-black tracking-[0.15em] text-slate-500 dark:text-slate-450 uppercase">Academy Connect</span>
-          <span className="text-[8px] font-extrabold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Version 2.5.0</span>
+          <span className="text-[8px] font-extrabold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Version 2.6.1</span>
           <span className="text-[8px] font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">—POWERED BY ANDROID—</span>
         </div>
       </div>

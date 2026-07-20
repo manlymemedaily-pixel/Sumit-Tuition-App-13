@@ -1111,6 +1111,19 @@ export function StudentMyTab({
 
   return (
     <div className="flex flex-col gap-4 animate-fadeIn" id="student-my-tab">
+      <div className="rounded-2xl border border-slate-100 bg-white/80 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70" id="student-my-tab-header">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600 dark:text-indigo-400">My Tab</p>
+            <h2 className="text-lg font-black text-slate-800 dark:text-slate-100">My Study Space</h2>
+          </div>
+          <div className="rounded-full bg-slate-50 px-2.5 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-950 dark:text-slate-400">
+            {sortedSubjects.length} Subjects
+          </div>
+        </div>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Browse your uploaded chapter notes and add remarks for each subject.</p>
+      </div>
+
       {/* File Explorer Layout Grid */}
       <div className="grid grid-cols-1 min-[520px]:grid-cols-12 gap-4 h-[calc(100vh-220px)] min-h-[500px] overflow-hidden" id="my-study-space-split-container">
         
@@ -1520,6 +1533,27 @@ export default function StudentDashboard({
 
   return (
     <div className="flex flex-col gap-4 overflow-x-hidden pb-6 animate-fadeIn" id="student-dashboard-root">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">Student Dashboard</p>
+          <h2 className="text-lg font-black text-slate-800 dark:text-slate-100">Your overview</h2>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => onNavigateToTab("My")}
+            className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-wide text-slate-600 transition-all hover:border-blue-500 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-blue-400"
+          >
+            My Notes
+          </button>
+          <button
+            onClick={() => onNavigateToTab("Settings")}
+            className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-wide text-slate-600 transition-all hover:border-blue-500 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-blue-400"
+          >
+            Settings
+          </button>
+        </div>
+      </div>
+
       <HeroCard student={student} onOpenAvatarModal={onOpenAvatarModal} onOpenStudentDetails={() => setShowStudentDetailsModal(true)} formatDate={formatDate} />
 
       <div className="grid gap-4 md:grid-cols-2" id="fixed-student-tiles">

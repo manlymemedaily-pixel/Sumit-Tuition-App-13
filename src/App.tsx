@@ -23,7 +23,7 @@ import {
   deleteUserAuthCredentials
 } from "./lib/firestoreService";
 
-const APP_VERSION = "2.6.0";
+const APP_VERSION = "2.6.1";
 
 function normalizeStudent(student: Partial<Student> | null | undefined): Student {
   return {
